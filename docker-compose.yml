@@ -25,7 +25,7 @@ services:
       MONGO_CONN_STR: mongodb://mongodb:27017/mydb
       USE_DB_AUTH: "false"
     depends_on:
-      - database
+      - mongodb
 
   mongodb:
     image: mongo:4.4
