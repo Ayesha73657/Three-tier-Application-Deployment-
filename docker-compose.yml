@@ -10,7 +10,7 @@ services:
     networks:
       - my_network
     ports:
-      - "80:8000"
+      - "80:80"
     depends_on:
       - backend
 
