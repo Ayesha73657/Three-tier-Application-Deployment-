@@ -1,0 +1,40 @@
+networks:
+  my_network:
+    driver: bridge
+
+services:
+
+  frontend:
+    image: frontend:v1
+    container_name: my_app
+    networks:
+      - my_network
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  backend:
+    image: backend:v1
+    container_name: backend
+    networks:
+      - my_network
+    ports:
+      - "8080:8080"
+    environment:
+      MONGO_URI: mongodb://database:27017/mydb
+    depends_on:
+      - database
+
+  database:
+    image: mongo:4.4
+    container_name: database
+    networks:
+      - my_network
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
