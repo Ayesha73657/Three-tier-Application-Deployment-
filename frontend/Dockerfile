@@ -1,8 +1,8 @@
 # Use the official Node.js 14 image as a base image
-FROM node:14
+FROM node:14 AS build
 
 # Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy the package.json and package-lock.json files to the container
 COPY package*.json ./
@@ -13,8 +13,12 @@ RUN npm install
 # Copy the rest of the application code to the container
 COPY . .
 
-# Exposing Port to the container
-EXPOSE 3000
+RUN npm run build
 
-# Specify the command to run when the container starts
-CMD [ "npm", "start" ]
+FROM nginx 
+
+RUN rm -rf /usr/share/nginx/html/*
+
+COPY --from=build /app/dist /usr/share/nginx/html/
+
+CMD ["nginx", "-g", "daemon off;"]
